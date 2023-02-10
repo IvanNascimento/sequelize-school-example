@@ -1,0 +1,26 @@
+{
+  "development": {
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "username": "user",
+    "password": "p@ssw0rd",
+    "database": "mydb",
+    "timezone": "-03:00"
+  },
+  "test": {
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "username": "user",
+    "password": "p@ssw0rd",
+    "database": "mydb",
+    "timezone": "-03:00"
+  },
+  "production": {
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "username": "user",
+    "password": "p@ssw0rd",
+    "database": "mydb",
+    "timezone": "-03:00"
+  }
+}

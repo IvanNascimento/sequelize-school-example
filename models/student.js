@@ -1,7 +1,15 @@
+const { Sequelize, DataTypes, Model, ModelStatic } = require("sequelize")
+
+/**
+ * 
+ * @param {Sequelize} sequelize 
+ * @param {DataTypes} DataTypes 
+ * @returns 
+ */
 module.exports = (sequelize, DataTypes) => {
   const model = sequelize.define('Student', {
-    grade: {
-      type: DataTypes.INTEGER,
+    name: {
+      type: DataTypes.STRING,
       allowNull: false
     },
     period: {
@@ -12,6 +20,11 @@ module.exports = (sequelize, DataTypes) => {
     tableName: "School-Student",
   })
 
+  /**
+   * 
+   * @param {{ [key: string] : ModelStatic<Model>}} models 
+   */
+  sequelize.models
   model.associate = (models) => {
     model.hasMany(models["Math"], {
       foreignKey: {

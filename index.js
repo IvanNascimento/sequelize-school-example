@@ -2,7 +2,7 @@ const express = require('express');
 const bp = require('body-parser')
 const cors = require('cors');
 
-const db = require('./models/index')
+const { db, models } = require('./models/index')
 const crud = require('./routes/crud')
 
 const app = express();
@@ -10,15 +10,15 @@ const app = express();
 const port = process.env.PORT || 4545
 const host = process.env.HOST || '0.0.0.0'
 
+const authorization = "MySuperHyperMegaBlaster2000APIKey"
+
 app.use(bp.json())
 app.use(bp.urlencoded())
 app.use(cors())
 
-const authenticated = true
-
 // Authentication system
 app.use((req, res, next) => {
-  if (authenticated) {
+  if (req.get('Authorization') == authorization) {
     next()
   } else {
     res
@@ -30,9 +30,9 @@ app.use((req, res, next) => {
   }
 })
 
-app.use("/student", crud(db.sequelize.models["Student"]))
-app.use("/subject/math", crud(db.sequelize.models["Math"]))
-app.use("/subject/programming", crud(db.sequelize.models["Programming"]))
+app.use("/student", crud(models["Student"]))
+app.use("/subject/math", crud(models["Math"]))
+app.use("/subject/programming", crud(models["Programming"]))
 
 // Error handling
 app.use((err, req, res, next) => {
@@ -45,13 +45,20 @@ app.use((err, req, res, next) => {
     })
 })
 
-db.sequelize.sync()
+db.authenticate()
   .then(() => {
-    console.log("Sucessfully connected to database")
-    app.listen(port, host, () => {
-      console.log("Server listening at port:", port)
-    })
+    db.sync({ alter: true })
+      .then(() => {
+        console.log("Sucessfully connected to database")
+        app.listen(port, host, () => {
+          console.log("Server listening at port:", port)
+          console.log(models);
+        })
+      })
+      .catch(err => {
+        console.error(err)
+      })
   })
-  .catch(err => {
-    console.error(err)
+  .catch(e => {
+    console.log(e);
   })

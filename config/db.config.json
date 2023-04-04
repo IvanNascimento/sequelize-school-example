@@ -1,15 +1,16 @@
 {
   "development": {
     "host": "127.0.0.1",
-    "dialect": "mysql",
+    "storage": "../db/database.sql",
+    "dialect": "sqlite",
     "username": "user",
     "password": "p@ssw0rd",
-    "database": "mydb",
-    "timezone": "-03:00"
+    "database": "mydb"
   },
   "test": {
     "host": "127.0.0.1",
-    "dialect": "mysql",
+    "storage": "../db/database.sql",
+    "dialect": "sqlite",
     "username": "user",
     "password": "p@ssw0rd",
     "database": "mydb",
@@ -17,7 +18,8 @@
   },
   "production": {
     "host": "127.0.0.1",
-    "dialect": "mysql",
+    "storage": "../db/database.sql",
+    "dialect": "sqlite",
     "username": "user",
     "password": "p@ssw0rd",
     "database": "mydb",

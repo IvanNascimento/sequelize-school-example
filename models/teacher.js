@@ -7,28 +7,24 @@ const { TABLES, MODELS } = require("../config/constants")
  * @param {DataTypes} DataTypes 
  */
 module.exports = (sequelize, DataTypes) => {
-  const model = sequelize.define(MODELS["Student"], {
+  const model = sequelize.define(MODELS["Teacher"], {
     name: {
       type: DataTypes.STRING,
       allowNull: false
     },
-    period: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
     enrollment: {
-      type: DataTypes.STRING(13),
+      type: DataTypes.STRING(14),
       allowNull: false,
       unique: true,
       defaultValue: () => {
         let d = new Date()
-        let p = d.getMonth() <= 5 ? 1 : 2
+        let p = d.getMonth() + 1
         let r = String(Date.now()).slice(-8)
         return `${d.getFullYear()}${p}${r}`
       }
     }
   }, {
-    tableName: TABLES["Student"],
+    tableName: TABLES["Teacher"],
   })
 
   /**

@@ -1,7 +1,7 @@
 {
   "development": {
     "host": "127.0.0.1",
-    "storage": "../db/database.sql",
+    "storage": "./db/database.sql",
     "dialect": "sqlite",
     "username": "user",
     "password": "p@ssw0rd",
@@ -9,7 +9,7 @@
   },
   "test": {
     "host": "127.0.0.1",
-    "storage": "../db/database.sql",
+    "storage": "./db/database.sql",
     "dialect": "sqlite",
     "username": "user",
     "password": "p@ssw0rd",
@@ -18,7 +18,7 @@
   },
   "production": {
     "host": "127.0.0.1",
-    "storage": "../db/database.sql",
+    "storage": "./db/database.sql",
     "dialect": "sqlite",
     "username": "user",
     "password": "p@ssw0rd",

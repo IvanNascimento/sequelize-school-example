@@ -1,5 +1,5 @@
 const { Sequelize, DataTypes, Model, ModelStatic } = require("sequelize")
-const { TABLES, MODELS } = require("../config/constants")
+const { SUBJECTS, MODELS, TABLES } = require("../config/constants")
 
 /**
  * 
@@ -7,38 +7,39 @@ const { TABLES, MODELS } = require("../config/constants")
  * @param {DataTypes} DataTypes 
  */
 module.exports = (sequelize, DataTypes) => {
-  const model = sequelize.define(MODELS["Student"], {
+  const model = sequelize.define(MODELS['Subject'], {
     name: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM,
+      values: SUBJECTS,
+      allowNull: false
+    },
+    grade: {
+      type: DataTypes.FLOAT,
       allowNull: false
     },
     period: {
       type: DataTypes.STRING,
       allowNull: false
-    },
-    enrollment: {
-      type: DataTypes.STRING(13),
-      allowNull: false,
-      unique: true,
-      defaultValue: () => {
-        let d = new Date()
-        let p = d.getMonth() <= 5 ? 1 : 2
-        let r = String(Date.now()).slice(-8)
-        return `${d.getFullYear()}${p}${r}`
-      }
     }
   }, {
-    tableName: TABLES["Student"],
+    tableName: TABLES['Subject'],
   })
 
   /**
    * 
    * @param {{ [key: string] : ModelStatic<Model>}} models 
    */
+  sequelize.models
   model.associate = (models) => {
-    model.hasMany(models[MODELS['Subject']], {
+    model.belongsTo(models[MODELS['Student']], {
       foreignKey: {
         name: "StudentId",
+        allowNull: false
+      }
+    })
+    model.belongsTo(models[MODELS['Teacher']], {
+      foreignKey: {
+        name: "TeacherId",
         allowNull: false
       }
     })

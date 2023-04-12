@@ -1,5 +1,4 @@
 const express = require('express');
-const bp = require('body-parser')
 const https = require('https');
 const fs = require('fs');
 const cors = require('cors');
@@ -7,19 +6,38 @@ const { rateLimit } = require('express-rate-limit');
 
 const { db, models } = require('./models/index')
 const crud = require('./routes/crud');
-const { MODELS, PORTS, HOST } = require('./config/constants');
+const { MODELS, PORTS, HOST, SUBJECTS } = require('./config/constants');
 
 const app = express();
 
 const authorization = "MySuperHyperMegaBlaster2000APIKey"
 
-app.use(bp.json())
+// parser the body to a json object
+app.use(express.json())
+
+// Force use url encodeded
 app.use(express.urlencoded({
   extended: true
 }))
-app.use(cors())
 
-// Authentication system
+// CORS
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'DELETE', 'PUT']
+}))
+
+// Requestes rate limit
+app.use(rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 15,
+  message: {
+    message: "Error",
+    detail: "Rate limit exceeded"
+  }
+}))
+
+// Authorization system
+// Verify api key
 app.use((req, res, next) => {
   if (req.get('Authorization') == authorization) {
     next()
@@ -33,12 +51,7 @@ app.use((req, res, next) => {
   }
 })
 
-app.use(rateLimit({
-  windowMs: 60 * 1000, // 1 minute
-  max: 15,
-  message: 'Too many requests'
-}))
-
+// Route to verify if API is online 
 app.get('/school', (req, res, next) => {
   res
     .status(200)
@@ -48,11 +61,21 @@ app.get('/school', (req, res, next) => {
     })
 })
 
+// API Routes
 app.use("/school/teacher", crud(models[MODELS['Teacher']]))
 app.use("/school/student", crud(models[MODELS['Student']]))
 app.use("/school/subject", crud(models[MODELS['Subject']]))
+app.get('/school/subjects', (req, res, next) => {
+  res
+    .status(200)
+    .send({
+      message: 'Success',
+      data: SUBJECTS
+    })
+})
 
-app.use((req, res) => {
+// Get 404 page not found
+app.use((req, res, next) => {
   const url = req.url
   res
     .status(404)
@@ -73,6 +96,7 @@ app.use((err, req, res, next) => {
     })
 })
 
+// Sync database and start server, HTTPS or HTTP
 db.authenticate()
   .then(() => {
     db.sync({
@@ -85,8 +109,7 @@ db.authenticate()
           // HTTPS Server
           const httpscert = {
             key: fs.readFileSync('./https/privkey.pem'),
-            cert: fs.readFileSync('./https/cert.pem'),
-            ca: fs.readFileSync('./https/chain.pem')
+            cert: fs.readFileSync('./https/cert.pem')
           }
           https.createServer(httpscert, app).listen(PORTS.https, HOST)
           console.log(`HTTPS server listening on ${HOST}:${PORTS.https}`)

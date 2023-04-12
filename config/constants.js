@@ -1,4 +1,9 @@
-const SUBJECTS = ['Math', 'Programming', 'English', 'Portuguese', 'Chemistry', 'Physic', 'Statistics']
+const SUBJECTS = [
+  'Math', 'Programming',
+  'English', 'Portuguese',
+  'Chemistry', 'Physic',
+  'Statistics']
+
 const MODELS = {
   'Student': 'Student',
   'Subject': 'Subject',
@@ -16,4 +21,7 @@ const PORTS = {
 }
 const HOST = '0.0.0.0'
 
-module.exports = { SUBJECTS, MODELS, TABLES, PORTS, HOST }
+module.exports = {
+  SUBJECTS, MODELS,
+  TABLES, PORTS, HOST
+}
